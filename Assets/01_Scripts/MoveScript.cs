@@ -5,26 +5,34 @@ using UnityEngine;
 public class MoveScript : MonoBehaviour
 {
     [SerializeField]
-    private int speed = 3;
+    private float speed = 3.0f;
+    [SerializeField]
+    private float jumpForce = 50.0f;
+
+    [SerializeField]
+    private Rigidbody rb;
+
+    private bool isGrounded = true;
 
     void Update()
     {
-        switch (Input.inputString)
+        float moveHorizontal = Input.GetAxis("Horizontal") * speed;
+        float moveVertical = Input.GetAxis("Vertical") * speed;
+
+        rb.velocity = new Vector3(moveHorizontal, rb.velocity.y, moveVertical);
+
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
-            case "W":
-                transform.Translate(Vector3.forward * speed * Time.deltaTime);
-                break;
-            case "A":
-                transform.Translate(Vector3.left * speed * Time.deltaTime);
-                break;
-            case "S":
-                transform.Translate(Vector3.back * speed * Time.deltaTime);
-                break;
-            case "D":
-                transform.Translate(Vector3.right * speed * Time.deltaTime);
-                break;
-            default:
-                break;
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            isGrounded = false;
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = true;
         }
     }
 }
