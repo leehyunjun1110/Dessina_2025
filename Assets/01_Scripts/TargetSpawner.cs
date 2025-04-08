@@ -20,7 +20,7 @@ public class TargetSpawner : MonoBehaviour
 
 
         float randomX = Random.Range(-10f, 10f);
-        nowTarget.transform.position = new Vector3(randomX, 0, 0);
         nowTarget.SetActive(true);
+        nowTarget.transform.position = new Vector3(randomX, 0, 0);
     }
 }
